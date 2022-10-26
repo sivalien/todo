@@ -1,0 +1,43 @@
+.navbar {
+    background: #161a2b;
+    height: 80px;
+    align-items: center;
+    display: flex;
+    font-size: 1.2rem;
+    position: sticky;
+    z-index: 999;
+    top: 0;
+    bottom:0;
+    overflow-x:hidden;
+  }
+
+  .navbar-container {
+    text-align: center;
+    width: 100%;
+  }
+  
+  .navbar-text {
+    color: #fff;
+    font-size: 2rem;
+  }
+
+  .btn-container {
+    margin-left: auto;
+    margin-right: 2%;
+  }
+
+  .navbar-btn {
+    font-size: 1.8rem;
+    cursor: pointer;
+    background-color: #161a2b;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    text-transform: capitalize;
+    padding: 4px 8px;
+  }
+
+  .navbar-container-login {
+    margin-left: 2%;
+  }
+  
