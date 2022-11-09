@@ -31,11 +31,11 @@ router.get('/', async (req, res) => {
 
 router.patch('/done/:id', async (req, res) => {
     try{
-      const id = req.params.id;
-      const ownerId = req.body.id;
-      const new_value = req.body.done;
-      const todo = await Todo.findByIdAndUpdate(id, {done: new_value, owner: ownerId});
-      res.status(200).send(todo);
+        const id = req.params.id;
+        const ownerId = req.body.id;
+        const new_value = req.body.done;
+        const todo = await Todo.findByIdAndUpdate(id, {done: new_value, owner: ownerId});
+        res.status(200).send(todo);
     }
     catch(error){
         res.status(500).json({message: error.message})

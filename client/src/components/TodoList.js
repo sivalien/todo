@@ -12,7 +12,7 @@ function TodoList() {
 
   const refreshTodo = useCallback(async () => {
     try {
-      await axios.get('http://localhost:5050/',
+      await axios.get('https://your-web-todo-list.herokuapp.com',
       {
         headers: {"Content-Type": "application/json"},
         params: {id}
@@ -28,7 +28,7 @@ function TodoList() {
 
   const removeTodo = useCallback(async (todoId) => {
     try {
-      await axios.delete('/delete/' + todoId, 
+      await axios.delete('https://your-web-todo-list.herokuapp.com/delete/' + todoId, 
       {
         headers: {"Content-Type": "application/json"},
         params: {ownerId: id}
@@ -43,7 +43,7 @@ function TodoList() {
   const completeTodo = useCallback(async (todoId, todoDone) => {
     console.log(!todoDone);
     try {
-      await axios.patch('/done/' + todoId, {id: id, done: !(todoDone)}, {
+      await axios.patch('https://your-web-todo-list.herokuapp.com/done/' + todoId, {id: id, done: !(todoDone)}, {
         headers: {"Content-Type": "application/json"},
       })
       .then(response => console.log(response))

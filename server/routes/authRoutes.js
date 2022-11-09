@@ -36,7 +36,7 @@ router.post('/signup',
             res.status(201).send(user)
         }
         catch (error) {
-            res.status(500).json({message: error.message})
+            res.status(500).json({message: ""})
         }
     });
 
@@ -73,7 +73,7 @@ router.post('/signin',
             
         }
         catch (error) {
-            res.status(500).json({message: error.message})
+            res.status(500).json({message: ""})
         }
     });
 

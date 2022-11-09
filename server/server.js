@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-var cors = require('cors')
 require('dotenv/config')
 const todoRoutes = require('./routes/todoRoutes')
 const authRoutes = require('./routes/authRoutes')
@@ -9,9 +8,20 @@ const authRoutes = require('./routes/authRoutes')
 const app = express();
 const port = process.env.PORT || 5050;
 
+const cors = require('cors')
+app.options('*', cors()) 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors())
+app.use(cors({
+  origin: ['http://localhost:3000'],
+  credentials: true
+}));
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin',  '*');
+  res.header('Access-Control-Allow-Headers', true);
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  next();
+});
 app.use('/auth', authRoutes)
 app.use('/', todoRoutes)
 

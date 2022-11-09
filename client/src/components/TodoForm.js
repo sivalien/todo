@@ -19,7 +19,7 @@ function TodoForm(props) {
     if (!input) return null;
     try {
       console.log(id);
-      await axios.post('/', {text: input, id: id}, 
+      await axios.post('https://your-web-todo-list.herokuapp.com/', {text: input, id: id}, 
       {headers: {
         "Content-Type": "application/json",
       }})

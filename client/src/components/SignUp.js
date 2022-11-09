@@ -12,7 +12,7 @@ function SignUp() {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('/auth/signup', {email: email, password: password}, 
+            await axios.post('https://your-web-todo-list.herokuapp.com/auth/signup', {email: email, password: password}, 
                 {headers: {
                     "Content-Type": "application/json",
                 }})
