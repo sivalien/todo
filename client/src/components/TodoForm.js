@@ -31,11 +31,10 @@ function TodoForm(props) {
     setInput('');
   }, [input, props, id]);
 
-  const handleUpdate = async e => {
+  const handleUpdate = useCallback(async e => {
     e.preventDefault();
     try {
-      console.log(props.edit)
-      await axios.patch('/update/' + props.edit.id, {value: input, id: id}, 
+      await axios.patch('https://your-web-todo-list.herokuapp.com/update/' + props.edit.id, {value: input, id: id}, 
       {headers: {
         "Content-Type": "application/json"
       }})
@@ -45,7 +44,7 @@ function TodoForm(props) {
       console.log(error)
     }
     setInput('');
-  }
+  }, [id, input, props])
 
   useEffect(() => {
     inputRef.current.focus();
