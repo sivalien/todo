@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
       res.status(201).send(todo)
     }
     catch (error) {
-        res.status(400).json({message: error.message})
+        res.status(500).json({message: error.message})
     }
   });
 
@@ -50,7 +50,7 @@ router.delete('/delete/:id', async (req, res) => {
         res.send(`${todo.text} has been deleted..`);
     }
     catch (error) {
-        res.status(400).json({ message: error.message })
+        res.status(500).json({ message: error.message })
     }
 })
 
