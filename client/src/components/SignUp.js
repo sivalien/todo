@@ -1,29 +1,28 @@
 import axios from 'axios';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext'
 
 
 function SignUp() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState(null);
-    const { signin } = useContext(AuthContext)
     const navigate = useNavigate();
 
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('auth/signup', {email: email, password: password}, 
+            await axios.post('/auth/signup', {email: email, password: password}, 
                 {headers: {
                     "Content-Type": "application/json",
                 }})
-            .then(res => signin(res.token, res.id))
         }
         catch (error) {
             console.log(error);
+            setMessage(error.response.data.message);
+            setPassword('');
+            setEmail('');
         }
-        navigate('/signin')
     }
 
     return (
@@ -37,6 +36,7 @@ function SignUp() {
                         name='text'
                         onChange={e => setEmail(e.target.value)}
                         className='auth-input'
+                        type="email"
                     />
                 </div>
                 <div className='auth-row'>
@@ -46,9 +46,11 @@ function SignUp() {
                         name='text'
                         onChange={e => setPassword(e.target.value)}
                         className='auth-input'
+                        type="password"
                     />
                 </div>
                 <div className='auth-row'>
+                    <p className='auth-error'>{message ? message : " "}</p>
                     <button className='btn-auth' onClick={handleClick}>
                         Sign up
                     </button>

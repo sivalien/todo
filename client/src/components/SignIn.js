@@ -6,13 +6,14 @@ import { AuthContext } from '../context/AuthContext'
 
 function SignIn() {
     const [email, setEmail] = useState();
+    const [message, setMessage] = useState(null);
     const [password, setPassword] = useState();
     const { signin } = useContext(AuthContext);
 
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5050/auth/signin', {email: email, password: password}, 
+            await axios.post('/auth/signin', {email: email, password: password}, 
                 {headers: {
                     "Content-Type": "application/json",
                 }})
@@ -22,6 +23,9 @@ function SignIn() {
         }
         catch (error) {
             console.log(error);
+            setMessage(error.response.data.message);
+            setPassword('');
+            setEmail('');
         }
     }
 
@@ -32,16 +36,16 @@ function SignIn() {
         <form className='form-login' onSubmit={e => e.preventDefault()}>
             <div className='auth-row'>
                 <input 
-                    type="text"
                     placeholder='email'
                     value={email}  
                     onChange={(e) => {setEmail(e.target.value); console.log(email)}}
                     className='auth-input'
+                    type="email"
                 />
             </div>
             <div className='auth-row'>
                 <input 
-                    type="text"
+                    type="password"
                     placeholder='password' 
                     value={password}
                     onChange={e => setPassword(e.target.value)}
@@ -49,6 +53,7 @@ function SignIn() {
                 />
             </div>
             <div className='auth-row'>
+                <p className='auth-error'>{message ? message : " "}</p>
                 <button className='btn-auth' onClick={handleClick}>
                     Sign in
                 </button>
