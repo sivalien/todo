@@ -40,15 +40,18 @@ function TodoList() {
     }
   }, [id, refreshTodo]);
 
-  const completeTodo = async todoId => {
+  const completeTodo = useCallback(async (todoId, todoDone) => {
+    console.log(!todoDone);
     try {
-      await axios.patch('/done/' + todoId, )
+      await axios.patch('/done/' + todoId, {id: id, done: !(todoDone)}, {
+        headers: {"Content-Type": "application/json"},
+      })
       .then(response => console.log(response))
       .then(() => refreshTodo())
     } catch(error) {
       console.log(error)
     }
-  };
+  }, [id, refreshTodo]);
 
   useEffect(() => {
     return () => {

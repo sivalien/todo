@@ -27,7 +27,7 @@ const Todo = ({ todos, completeTodo, removeTodo, refreshTodo }) => {
       className={todo.done ? 'todo-row complete' : 'todo-row'}
       key={index}
     >
-      <div className='todo-text' key={index} onClick={() => completeTodo(todo._id)}>
+      <div className='todo-text' key={index} onClick={(e) => {e.preventDefault(); completeTodo(todo._id, todo.done)}}>
         {todo.text}
       </div>
       <div className='icons'>
