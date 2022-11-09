@@ -4,6 +4,7 @@ const User = require('../models/Users')
 const { check, validationResult } = require('express-validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+require('dotenv/config')
 
 router.post('/signup', 
     [
@@ -16,10 +17,15 @@ router.post('/signup',
             const { email, password } = req.body;
             const isUsed = await User.findOne({email: email});
             if (!errors.isEmpty()) {
-                return res.status(400).json({errors: errors.array(), message: "Incorrect data"})
+                const error_array = errors.array();
+                if (error_array.length == 2) {
+                    return res.status(400).json({message: "Incorrect data: email is invalid and password contains less than 5 characters"});
+                } else {
+                    return res.status(400).json({message: error_array[0].msg});
+                }
             }
             if (isUsed) {
-                return res.status(300).send({message: "This email is already in use"})
+                return res.status(400).send({message: "This email is already in use"})
             }
             const hashedPassword = await bcrypt.hash(password, 12)
             const user = await new User({
@@ -30,40 +36,44 @@ router.post('/signup',
             res.status(201).send(user)
         }
         catch (error) {
-            res.status(400).json({message: error.message})
+            res.status(500).json({message: error.message})
         }
     });
 
 
 router.post('/signin', 
     [
-        check('email', 'Incorrect email').isEmail(),
-        check('password', 'Password should contain at least 5 characters').exists()
+        check('email', 'Incorrect email').isEmail()
     ], 
     async (req, res) => {
         try {
             const errors = validationResult(req)
             const { email, password } = req.body;
-            const user = await User.findOne({email: email});
             if (!errors.isEmpty()) {
-                return res.status(400).json({errors: errors.array(), message: "Incorrect data"})
+                return res.status(400).json({message: errors.array()[0].msg});
             }
-            if (!user) {
-                return res.status(400).send({message: "There is no account with such email"})
-            }
-            const isCorrect = bcrypt.compare(password, user.password)
-            if (!isCorrect) {
-                return res.status(400).send({message: "Incorrect password"})
-            }
-            const token = jwt.sign(
-                {userId: user.id},
-                process.env.SECRET,
-                {expiresIn: '1h'}
-            )
-            res.json({token: token, id: user.id})
+            await User.findOne({email: email})
+            .then(user => {
+                if (!user) return res.status(400).json({ message: "There is no account with such email" });
+                bcrypt.compare(password, user.password, (err, data) => {
+                    if (err) return res.status(400);
+                    if (data) {
+                        const token = jwt.sign(
+                            {userId: user.id},
+                            process.env.SECRET,
+                            {expiresIn: '1h'}
+                        )
+                        return res.json({token: token, id: user.id})
+                    } else {
+                        return res.status(401).json({ message: "Wrong password" })
+                    }
+    
+                })
+            })
+            
         }
         catch (error) {
-            res.status(400).json({message: error.message})
+            res.status(500).json({message: error.message})
         }
     });
 
